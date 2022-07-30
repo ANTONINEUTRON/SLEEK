@@ -4,11 +4,13 @@ import { Link } from "react-router-dom";
 import ConnectWalletModal from "./../components/ConnectWalletModal"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy} from "@fortawesome/free-solid-svg-icons";
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 const NavBar = ()=> {
   const [isOpen, setIsOpen] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [walletAddress, setWalletAddress] = useState()
+  const [walletAddress, setWalletAddress] = useState();
 
   const openModal = ()=>{
     setModalIsOpen(true);
@@ -16,6 +18,19 @@ const NavBar = ()=> {
 
   const truncate = (str)=>{
     return str.slice(0,4)+"......"+str.slice(str.length-4);
+  }
+
+  const copyAddress = ()=>{
+    navigator.clipboard.writeText(walletAddress);
+    toast('Wallet Address Copied!', {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   }
 
   return (
@@ -40,7 +55,7 @@ const NavBar = ()=> {
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
                   {walletAddress ? (
-                    <button onClick={()=>openModal()}
+                    <button onClick={()=>copyAddress()}
                       className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                     >
                       {truncate(walletAddress)}
@@ -123,11 +138,21 @@ const NavBar = ()=> {
           {(ref) => (
             <div className="md:hidden" id="mobile-menu">
               <div ref={ref} className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <button
+              {walletAddress ? (
+                <button onClick={()=>copyAddress()}
+                  className="hover:bg-gray-700 text-white block px-3 py-2 rounded-md text-base font-medium"
+                >
+                  {truncate(walletAddress)}
+                  <FontAwesomeIcon icon={faCopy} className="pl-2"/>
+                </button>
+              ) : (
+                <button onClick={()=>openModal()}
                   className="hover:bg-gray-700 text-white block px-3 py-2 rounded-md text-base font-medium"
                 >
                   Connect
                 </button>
+              )}
+                
 
                 <Link to={"/publish"}
                   className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
@@ -140,18 +165,18 @@ const NavBar = ()=> {
         </Transition>
       </nav>
 
-      {/* <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        </div>
-      </header>
-      <main>
-        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8"
-          <div className="px-4 py-6 sm:px-0">
-            <div className="border-4 border-dashed border-gray-200 rounded-lg h-96"></div>
-          </div>
-        </div>
-      </main> */}
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        />
     </div>
   );
 };
