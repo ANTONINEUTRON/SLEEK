@@ -7,7 +7,7 @@ const Home = ()=>{
     return (
         <div>
             <NavBar />
-            <div className="container m-5 p-5 shadow-lg">
+            <div className="container bg-white m-5 p-5 shadow-xl rounded-lg">
                 <Search />
             </div>
         </div>
