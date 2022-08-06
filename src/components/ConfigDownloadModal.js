@@ -3,7 +3,8 @@ import MyAlgoConnect from '@randlabs/myalgo-connect';
 import { Fragment } from 'react';
 import { ReactComponent as MyAlgo } from "./../icons/myalgo.svg";
 
-const ConnectWalletModal = ({isOpen, setIsOpen, setWalletAddress})=>{
+const ConfigDownloadModal = ({isOpen, setIsOpen, url, setUrlToFile})=>{
+
   function closeModal() {
     setIsOpen(false)
   }
@@ -11,18 +12,6 @@ const ConnectWalletModal = ({isOpen, setIsOpen, setWalletAddress})=>{
   function openModal() {
     setIsOpen(true)
   }
-
-  const connectWallet = async()=>{
-    const myAlgoConnect = new MyAlgoConnect();
-
-    const accountsSharedByUser = await myAlgoConnect.connect();
-    console.log(accountsSharedByUser[0].address);
-
-    setIsOpen(false);
-
-    //Show wallet address at top
-    setWalletAddress(accountsSharedByUser[0].address)
-  };
 
   return (
     <>
@@ -56,7 +45,11 @@ const ConnectWalletModal = ({isOpen, setIsOpen, setWalletAddress})=>{
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    Select Wallet
+                    Download the <code className='code'>metadata.json</code> by clicking the link below
+                    <br/>
+                    Afterwhich you are to upload it and paste the link to the metadata file in the text field below.
+                    <br/> 
+                    We will verify the link provided.
                   </Dialog.Title>
                   {/* <div className="mt-2">
                     <p className="text-sm text-gray-500">
@@ -65,21 +58,25 @@ const ConnectWalletModal = ({isOpen, setIsOpen, setWalletAddress})=>{
                     </p>
                   </div> */}
 
-                  <div className="mt-4 flex flex-col px-5">
+                  <div className="mt-4 flex flex-col px-5 items-center">
+                    <a href={url} download="metadata.json" className="justify-center items-center mt-3 rounded-lg border border-transparent bg-blue-100 px-4 w-36 py-2 font-medium text-blue-900 hover:bg-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 text-lg">
                     <button
-                      type="button"
-                      className="justify-center items-center mt-3 rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 text-lg"
-                      onClick={()=>connectWallet()}
-                    >
-                        <MyAlgo className='inline-flex mx-3'/>
-                        MyAlgo
+                      type="button">
+                        Download
                     </button>
+                    </a>
+
+                    <label htmlFor="title" className="mt-5 block font-medium text-sm text-gray-700 w-full">Book Title</label>
+                    <input type="text" name="title"  onChange={(e)=>{ setUrlToFile(values => e.target.value) }}
+                        class="bg-white hover:bg-gray-50  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block mb-5 w-full p-2.5"
+                        placeholder="Book Title" required/>
+
                     <button
                       type="button"
-                      className="justify-center my-3 rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 text-lg"
+                      className="justify-center my-3 rounded-md border border-transparent w-full bg-blue-500 px-4 py-2 font-medium text-white hover:bg-blue-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 text-lg"
                       onClick={closeModal}
                     >
-                        Algo Signer
+                        DONE
                     </button>
                   </div>
                 </Dialog.Panel>
@@ -92,4 +89,4 @@ const ConnectWalletModal = ({isOpen, setIsOpen, setWalletAddress})=>{
   )
 };
 
-export default ConnectWalletModal;
+export default ConfigDownloadModal;
